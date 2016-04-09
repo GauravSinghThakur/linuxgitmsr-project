@@ -7,3 +7,8 @@ git add
 git push
 git pull
 git commit -m
+git branch module1
+git checkout module1
+git branch -d module1
+git push origin master
+git push origin --delete module1
