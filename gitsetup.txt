@@ -1,0 +1,9 @@
+git config --global user.name "GauravSinghThakur"
+git config --global user.email "gst.coldplayer@gmail.com"
+git config --global credetial.helper wincred
+git clone https://github.com/GauravSinghThakur/linuxgitmsr-project.git
+git status
+git add
+git push
+git pull
+git commit -m
