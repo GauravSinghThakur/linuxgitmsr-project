@@ -9,13 +9,55 @@ public class CommitTree {
 	private String sql;
 	private ResultSet rs = null;
 	private ArrayList<CommitInfo> al = null;
+	private ArrayList<CommitInfo> mcidlinus = null;
 	private CommitInfo obj = null;
 	
 	public void setConnection(Connection conn){
 		con = conn;
 	} 
 	
-	public ArrayList<CommitInfo> setCommitTree(String commit) {
+	
+	public ArrayList<CommitInfo> getMcidlinus() {
+		   try{
+		      //STEP 1: Execute a query
+		      System.out.println("Creating statement...");
+		      stmt = con.createStatement();
+		      sql = "select distinct mcidlinus from pathtoblessed";
+		      rs = stmt.executeQuery(sql);
+		      mcidlinus = new ArrayList<CommitInfo>();     
+		      //STEP 2: Extract data from result set
+		      while(rs.next()){
+		         //Retrieve by column name
+		    	  //*********************************
+		    	  obj = new CommitInfo();
+	
+		    	  obj.setMcidlinus(rs.getString("mcidlinus"));
+		    	  //System.out.println("Mcidlinus: "+obj.getMcidlinus());
+	
+		    	  mcidlinus.add(obj);
+		    	  //*********************************
+		      }
+		      		      		  
+		    //Clean-up environment
+		      rs.close();
+		      stmt.close();
+		   } catch(SQLException se){
+		         se.printStackTrace();
+		   }
+		return mcidlinus; 
+		   	   
+	   }
+	
+	public void printMcidlinus(ArrayList<CommitInfo> al1){
+		System.out.println("\tCommit Hierarchy");
+		for (int i=0; i<al1.size(); i++){
+			System.out.println("********" + i);
+			System.out.println(al1.get(i).getMcidlinus());
+			System.out.println("------------------------");
+		}
+	}
+	
+	public ArrayList<CommitInfo> getCommitTree(String commit) {
 		   try{
 		      //STEP 1: Execute a query
 		      System.out.println("Creating statement...");
@@ -68,7 +110,7 @@ public class CommitTree {
 		   	   
 	   }
 	
-	public void getCommitTree(ArrayList<CommitInfo> al1){
+	public void printCommitTree(ArrayList<CommitInfo> al1){
 		System.out.println("\tCommit Hierarchy");
 		for (int i=0; i<al1.size(); i++){
 			System.out.println("********" + i);

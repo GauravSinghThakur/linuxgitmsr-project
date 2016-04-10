@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Commits {
 	private static Connection con = null;
 	private static ArrayList<CommitInfo> al = null;
+	private static ArrayList<CommitInfo> mcidlinus = null;
 	private static DbConnect postgres = null;
 	private static CommitTree ct = null;
 	
@@ -16,17 +17,24 @@ public class Commits {
 		//Step 2: Connection to the DB
 		con = postgres.connectToPg();
 		
-		//Step 4: Pass the connection object to CommitTree
+		//Step 3: Pass the connection object to CommitTree
 		ct = new CommitTree();
 		ct.setConnection(con);
 		
 		//Step 4: Pass the commit id to CommitTree
-		al = ct.setCommitTree("5ede3ceb7b2c2843e153a1803edbdc8c56655950");
+		al = ct.getCommitTree("5ede3ceb7b2c2843e153a1803edbdc8c56655950");
 		
 		//Step 5: Print CommitTree in an ArrayList
-		ct.getCommitTree(al);
+		ct.printCommitTree(al);
 		
-		//Step 7: Close Connection to DB
+		//Step 6: get mcidlinus in an ArrayList
+		mcidlinus = ct.getMcidlinus();
+		
+		//Step 7: Print CommitTree in an ArrayList
+		ct.printMcidlinus(mcidlinus);
+			
+				
+		//Step 8: Close Connection to DB
         postgres.closeConnection(con);
 	}
 
