@@ -1,15 +1,24 @@
 package linuxgitmsr;
 
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import java.awt.BorderLayout;
+import java.awt.Container;
+
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JSplitPane;
 
 public class LinuxgitmsrGUI {
 
@@ -44,33 +53,36 @@ public class LinuxgitmsrGUI {
 	public LinuxgitmsrGUI() {
 		initialize();
 	}
+	
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1019, 813);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		frame.getContentPane().add(scrollPane, BorderLayout.WEST);
+		Container content = frame.getContentPane();
+		JTree tree = new JTree();
+		JScrollPane scrolltree = new JScrollPane(tree);
+		content.add(scrolltree, BorderLayout.CENTER);
+		//frame.setVisible(true);		
 		
 		//Step 1: checking the postgres connection with DB linuxgitmsr
-				postgres = new DbConnect();
-				//Step 2: Connection to the DB
-				con = postgres.connectToPg();
-				//Step 3: Pass the connection object to CommitTree
-				ct = new CommitTree();
-				ct.setConnection(con);
-				//Step 4: Pass the commit id to CommitTree
-				al = ct.getCommitTree("5ede3ceb7b2c2843e153a1803edbdc8c56655950");
-				//Step 6: get mcidlinus in an ArrayList
-				mcidlinus = ct.getMcidlinus();
-				//Step 8: Close Connection to DB
-				postgres.closeConnection(con);
+		postgres = new DbConnect();
+		//Step 2: Connection to the DB
+		con = postgres.connectToPg();
+		//Step 3: Pass the connection object to CommitTree
+		ct = new CommitTree();
+		ct.setConnection(con);
+		//Step 4: get mcidlinus in an ArrayList
+		mcidlinus = ct.getMcidlinus();
+		//Step 5: Close Connection to DB
+		postgres.closeConnection(con);
 				
-		JTree tree = new JTree();
+		// add mcidlinus to tree node
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Hierarchy") {
 				{
@@ -83,7 +95,28 @@ public class LinuxgitmsrGUI {
 				}
 			}
 		));
-		frame.getContentPane().add(tree, BorderLayout.NORTH);
+		
+		MouseListener ml = new MouseAdapter() {
+		    public void mousePressed(MouseEvent e) {
+		        int selRow = tree.getRowForLocation(e.getX(), e.getY());
+		        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+		        if(selRow != -1) {
+		            if(e.getClickCount() == 1) {
+		                mySingleClick(selRow, selPath);
+		            }
+		            //else if(e.getClickCount() == 2) {
+		            //    myDoubleClick(selRow, selPath);
+		            //}
+		        }
+		    }
+		};
+		tree.addMouseListener(ml);
+		
+	}
+
+	public void mySingleClick(int selRow, TreePath selPath) {
+		System.out.println("you have clicked");
+		JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
 	}
 
 }
