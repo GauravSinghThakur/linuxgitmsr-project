@@ -64,6 +64,7 @@ public class LinuxgitmsrGUI {
 		frame.setBounds(100, 100, 1019, 813);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// frame -> container -> ScrollPane -> Tree
 		Container content = frame.getContentPane();
 		JTree tree = new JTree();
 		JScrollPane scrolltree = new JScrollPane(tree);
@@ -102,7 +103,9 @@ public class LinuxgitmsrGUI {
 		        TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 		        if(selRow != -1) {
 		            if(e.getClickCount() == 1) {
-		                mySingleClick(selRow, selPath);
+		            	DefaultMutableTreeNode node =(DefaultMutableTreeNode)tree.getSelectionPath().getLastPathComponent();
+		            	String commit = (String) node.getUserObject();
+		            	mySingleClick(selRow, selPath, commit);		               
 		            }
 		            //else if(e.getClickCount() == 2) {
 		            //    myDoubleClick(selRow, selPath);
@@ -114,9 +117,10 @@ public class LinuxgitmsrGUI {
 		
 	}
 
-	public void mySingleClick(int selRow, TreePath selPath) {
-		System.out.println("you have clicked");
-		JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
+	public void mySingleClick(int selRow, TreePath selPath, String commit) {
+		System.out.println("you have clicked "+commit);
+		JOptionPane.showMessageDialog(null, commit+" :My Goodness, this is so concise");
+		
 	}
 
 }
