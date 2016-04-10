@@ -15,7 +15,7 @@ public class CommitTree {
 		con = conn;
 	} 
 	
-	public void setCommitTree(String commit) {
+	public ArrayList<CommitInfo> setCommitTree(String commit) {
 		   try{
 		      //STEP 1: Execute a query
 		      System.out.println("Creating statement...");
@@ -63,22 +63,23 @@ public class CommitTree {
 		      stmt.close();
 		   } catch(SQLException se){
 		         se.printStackTrace();
-		   } 
+		   }
+		return al; 
 		   	   
 	   }
 	
-	public void getCommitTree(){
+	public void getCommitTree(ArrayList<CommitInfo> al1){
 		System.out.println("\tCommit Hierarchy");
-		for (int i=0; i<al.size(); i++){
+		for (int i=0; i<al1.size(); i++){
 			System.out.println("********" + i);
-			System.out.println(al.get(i).getMcidlinus());
-			System.out.println(al.get(i).getMnextmerge());
-			System.out.println(al.get(i).getMnext());
-			System.out.println(al.get(i).getCid());
-			System.out.println(al.get(i).getComdate());
-			System.out.println(al.get(i).getRepo());
-			System.out.println(al.get(i).getMdist());
-			System.out.println(al.get(i).getMwhen());
+			System.out.println(al1.get(i).getMcidlinus());
+			System.out.println(al1.get(i).getMnextmerge());
+			System.out.println(al1.get(i).getMnext());
+			System.out.println(al1.get(i).getCid());
+			System.out.println(al1.get(i).getComdate());
+			System.out.println(al1.get(i).getRepo());
+			System.out.println(al1.get(i).getMdist());
+			System.out.println(al1.get(i).getMwhen());
 			System.out.println("------------------------");
 		}
 		

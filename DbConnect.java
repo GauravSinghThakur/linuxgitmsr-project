@@ -11,7 +11,7 @@ public class DbConnect {
 	private String password = "admin";
 	
 	// method to connect to postgres DB
-	public void connectToPg(){
+	public Connection connectToPg(){
 		System.out.println("-------- PostgreSQL "+"JDBC Connection Testing ------------");
  
 		try { 
@@ -19,8 +19,7 @@ public class DbConnect {
  		} catch (ClassNotFoundException e) {
  			System.out.println("No PostgreSQL JDBC Driver? "+"Include in your library path!");
 			e.printStackTrace();
-			return;
- 		}
+		}
  
 		System.out.println("PostgreSQL JDBC Driver Registered!");
  
@@ -29,7 +28,6 @@ public class DbConnect {
 		} catch (SQLException e) {
 			System.out.println("Connection Failed! Check output console");
 			e.printStackTrace();
-			return; 
 		}
  
 		if (con != null) {
@@ -37,16 +35,13 @@ public class DbConnect {
 		} else {
 			System.out.println("Failed to make connection! ):");
 		}
+		return con;
 	}
 	
-	//method to return the succesful connection
-	public Connection getConnection(){
-		return con;	
-	}
-	
-	public void closeConnection(){
+		
+	public void closeConnection(Connection conn){
 		try {
-			con.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
