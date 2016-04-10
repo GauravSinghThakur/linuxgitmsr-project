@@ -31,7 +31,7 @@ public class LinuxgitmsrGUI {
 	private static ArrayList<CommitInfo> mcidlinus = null;
 	private static DbConnect postgres = null;
 	private static CommitTree ct = null;
-
+	private static JEditorPane editor = null;
 
 	/**
 	 * Launch the application.
@@ -66,13 +66,13 @@ public class LinuxgitmsrGUI {
 		frame.setBounds(100, 100, 1019, 813);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		// frame -> container -> panel -> ScrollPane -> Tree
-		
+		// frame -> container -> outerbox -> splitpane -> left panel -> ScrollPane -> Tree
+		//											   -> right panel
 		 JSplitPane splitPane = new JSplitPane();
 	     JPanel leftPanel = new JPanel();
 	     JTree tree = new JTree();
 	     JPanel rightPanel = new JPanel();
-	     JEditorPane editor = new JEditorPane();
+	     editor = new JEditorPane();
 	     JScrollPane scroller = new JScrollPane(editor);
 	     JScrollPane treeScroller = new JScrollPane(tree);
 
@@ -84,13 +84,11 @@ public class LinuxgitmsrGUI {
 	     rightPanel.setLayout(new BorderLayout() );
 	     rightPanel.add(scroller, BorderLayout.CENTER);
 
-
 	     splitPane.setLeftComponent(leftPanel);
 	     splitPane.setRightComponent(rightPanel);
 
-
-	       outerBox.setLayout (new BorderLayout ( ) );
-	       outerBox.add ("Center", splitPane);
+	     outerBox.setLayout (new BorderLayout ( ) );
+	     outerBox.add ("Center", splitPane);
 
 	     frame.getContentPane().add(outerBox);
 		
@@ -144,8 +142,29 @@ public class LinuxgitmsrGUI {
 	}
 
 	public void mySingleClick(int selRow, TreePath selPath, String commit) {
-		System.out.println("you have clicked "+commit);
-		JOptionPane.showMessageDialog(null, commit+" :My Goodness, this is so concise");
+			//Step 1: checking the postgres connection with DB linuxgitmsr
+			postgres = new DbConnect();
+			//Step 2: Connection to the DB
+			con = postgres.connectToPg();
+			//Step 3: Pass the connection object to CommitTree
+			ct = new CommitTree();
+			ct.setConnection(con);
+			//Step 4: Pass the commit id to CommitTree
+			al = ct.getCommitTree(commit);
+			//Step 5: Print CommitTree in an ArrayList
+			ct.printCommitTree(al);
+			//Step 8: Close Connection to DB
+		     postgres.closeConnection(con);
+		
+		     System.out.println("you have clicked "+commit);
+		     //JOptionPane.showMessageDialog(null, commit+" :My Goodness, this is so concise");
+		     for (int i=0; i<al.size(); i++){
+		    	 editor.setText("\n mcidlinus: "+al.get(i).getMcidlinus()+"\n mnextmerge: "
+		    			 		+al.get(i).getMnextmerge()+"\n mnext: "+al.get(i).getMnext()+"\n cid: "+al.get(i).getCid()+
+		    			 		"\n repo: "+al.get(i).getRepo()+"\n mdist: "+al.get(i).getMdist());
+		    	 //editor.setText(al.get(i).getComdate());
+		    	 //editor.setText(al.get(i).getMwhen());
+			}		     
 		
 	}
 
