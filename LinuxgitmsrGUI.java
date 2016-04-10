@@ -158,13 +158,23 @@ public class LinuxgitmsrGUI {
 		
 		     System.out.println("you have clicked "+commit);
 		     //JOptionPane.showMessageDialog(null, commit+" :My Goodness, this is so concise");
+		     
+		     String heading = "\n \t\tmcidlinus \t\t\t\t mnextmerge \t\t\t\t mnext \t\t\t\t cid \t\t repo \t\t mdist \n";
+		     String concatenate = "";
+		     String commitTree = "";
+		     
 		     for (int i=0; i<al.size(); i++){
-		    	 editor.setText("\n mcidlinus: "+al.get(i).getMcidlinus()+"\n mnextmerge: "
-		    			 		+al.get(i).getMnextmerge()+"\n mnext: "+al.get(i).getMnext()+"\n cid: "+al.get(i).getCid()+
-		    			 		"\n repo: "+al.get(i).getRepo()+"\n mdist: "+al.get(i).getMdist());
+		    	 
+		    	 concatenate = "\n"+al.get(i).getMcidlinus()+"\t\t"
+		    			 		+al.get(i).getMnextmerge()+"\t\t"+al.get(i).getMnext()+"\t\t"+al.get(i).getCid()+
+		    			 		"\t\t"+al.get(i).getRepo()+"\t"+al.get(i).getMdist();
+		    	
+		    	commitTree = commitTree+concatenate; 
 		    	 //editor.setText(al.get(i).getComdate());
 		    	 //editor.setText(al.get(i).getMwhen());
-			}		     
+			}
+		     commitTree = heading+commitTree;
+		     editor.setText(commitTree);
 		
 	}
 
