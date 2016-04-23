@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JEditorPane;
@@ -29,7 +30,6 @@ public class LinuxgitmsrGUI {
 	private static Connection con = null;
 	private static ArrayList<CommitInfo> al = null;
 	private static ArrayList<CommitInfo> mcidlinus = null;
-	private static DbConnect postgres = null;
 	private static CommitTree ct = null;
 	private static JEditorPane editor = null;
 
@@ -92,20 +92,11 @@ public class LinuxgitmsrGUI {
 
 	     frame.getContentPane().add(outerBox);
 		
-			//Step 1: checking the postgres connection with DB linuxgitmsr
-				postgres = new DbConnect();
-				//Step 2: Connection to the DB
-				con = postgres.connectToPg();
-				//Step 3: Pass the connection object to CommitTree
-				ct = new CommitTree();
-				ct.setConnection(con);
-				//Step 4: get mcidlinus in an ArrayList
-				mcidlinus = ct.getMcidlinus();
-				//Step 5: Close Connection to DB
-				postgres.closeConnection(con);
-		
-		
-			// add mcidlinus to tree node
+		//Step 1: get mcidlinus commits from CommitTree
+	     ct = new CommitTree();
+	     mcidlinus = ct.getMcidlinus();
+						
+		// add mcidlinus to tree node
 		
 			tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Hierarchy") {
@@ -138,24 +129,19 @@ public class LinuxgitmsrGUI {
 		    }
 		};
 		tree.addMouseListener(ml);
-		
+			
 	}
 
 	public void mySingleClick(int selRow, TreePath selPath, String commit) {
-			//Step 1: checking the postgres connection with DB linuxgitmsr
-			postgres = new DbConnect();
-			//Step 2: Connection to the DB
-			con = postgres.connectToPg();
-			//Step 3: Pass the connection object to CommitTree
+			
 			ct = new CommitTree();
-			ct.setConnection(con);
-			//Step 4: Pass the commit id to CommitTree
+			//Step 1: get mcidlinus commits from CommitTree
+			mcidlinus = ct.getMcidlinus();
+			//Step 2: Get Tree			
 			al = ct.getCommitTree(commit);
-			//Step 5: Print CommitTree in an ArrayList
+			//Step 3: Print CommitTree in an ArrayList
 			ct.printCommitTree(al);
-			//Step 8: Close Connection to DB
-		     postgres.closeConnection(con);
-		
+			
 		     System.out.println("you have clicked "+commit);
 		     //JOptionPane.showMessageDialog(null, commit+" :My Goodness, this is so concise");
 		     
@@ -174,7 +160,7 @@ public class LinuxgitmsrGUI {
 		    	 //editor.setText(al.get(i).getMwhen());
 			}
 		     commitTree = heading+commitTree;
-		     editor.setText(commitTree);
+		     editor.setText(commitTree);	     
 		
 	}
 
